@@ -78,3 +78,68 @@ function play() {
 
     document.getElementById("guess").value = "";
 }
+
+// Guessing
+function makeGuess() {
+    const guessInput = document.getElementById("guess");
+    const guess = parseInt(guessInput.value);
+
+    if (isNaN(guess) || guess < 1 || guess > range) {
+        document.getElementById("msg").textContent =
+            `${playerName}, please enter a valid number between 1 and ${range}.`;
+        return;
+    }
+
+    guessCount++;
+    let message = "";
+
+    if (guess > answer) {
+        message = "Too high";
+    } else if (guess < answer) {
+        message = "Too low";
+    } else {
+        message = `Correct! Great job, ${playerName}!`;
+        document.getElementById("msg").textContent = message;
+
+        updateScore(guessCount);
+        updateTimers(new Date().getTime());
+        reset();
+        return;
+    }
+
+    const diff = Math.abs(guess - answer);
+    if (diff <= 2) {
+        message += " - Hot!";
+    } else if (diff <= 5) {
+        message += " - Warm!";
+    } else {
+        message += " - Cold!";
+    }
+
+    document.getElementById("msg").textContent = `${playerName}, ${message}`;
+    guessInput.value = "";
+}
+
+// Score
+function updateScore(score) {
+    scores.push(score);
+    gamesPlayed++;
+
+    if (score !== range) {
+        wins++;
+        totalGuesses += score;
+    }
+
+    document.getElementById("wins").textContent = `Total wins: ${wins}`;
+
+    if (wins > 0) {
+        const avgScore = (totalGuesses / wins).toFixed(2);
+        document.getElementById("avgScore").textContent =
+            `Average Score: ${avgScore}`;
+    } else {
+        document.getElementById("avgScore").textContent =
+            "Average Score: --";
+    }
+
+    updateLeaderboard();
+}
