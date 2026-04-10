@@ -143,3 +143,45 @@ function updateScore(score) {
 
     updateLeaderboard();
 }
+
+// Leaderboard
+function updateLeaderboard() {
+    scores.sort((a, b) => a - b);
+    const leaderboardItems = document.getElementsByName("leaderboard");
+
+    for (let i = 0; i < leaderboardItems.length; i++) {
+        if (i < scores.length) {
+            leaderboardItems[i].textContent = scores[i];
+        } else {
+            leaderboardItems[i].textContent = "--";
+        }
+    }
+}
+
+// Give Up
+function giveUp() {
+    document.getElementById("msg").textContent =
+        `${playerName}, you gave up! The correct number was ${answer}.`;
+
+    updateScore(range);
+    updateTimers(new Date().getTime());
+    reset();
+}
+
+// Timer 
+function updateTimers(endMs) {
+    const elapsedSeconds = (endMs - startTime) / 1000;
+    totalTime += elapsedSeconds;
+
+    if (fastestTime === null || elapsedSeconds < fastestTime) {
+        fastestTime = elapsedSeconds;
+    }
+
+    const avgTime = totalTime / gamesPlayed;
+
+    document.getElementById("fastest").textContent =
+        `Fastest Game: ${fastestTime.toFixed(2)} seconds`;
+
+    document.getElementById("avgTime").textContent =
+        `Average Time: ${avgTime.toFixed(2)} seconds`;
+}
