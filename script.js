@@ -49,3 +49,32 @@ function time() {
 
     return `${month} ${day}${suffix}, ${year} ${hours}:${minutes}:${seconds}`;
 }
+
+// Live Time Display
+document.getElementById("date").textContent = time();
+setInterval(() => {
+    document.getElementById("date").textContent = time();
+}, 1000);
+
+// Functions 
+function play() {
+    const selectedLevel = document.querySelector('input[name="level"]:checked');
+    range = parseInt(selectedLevel.value);
+
+    answer = Math.floor(Math.random() * range) + 1;
+    guessCount = 0;
+    startTime = new Date().getTime();
+
+    document.getElementById("msg").textContent =
+        `${playerName}, I'm thinking of a number between 1 and ${range}. Make a guess!`;
+
+    document.getElementById("guessBtn").disabled = false;
+    document.getElementById("giveUpBtn").disabled = false;
+    document.getElementById("playBtn").disabled = true;
+
+    document.querySelectorAll('input[name="level"]').forEach(radio => {
+        radio.disabled = true;
+    });
+
+    document.getElementById("guess").value = "";
+}
